@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
@@ -41,10 +43,25 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'role_id' => $request->role,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        /* Check for role */
+        if (!DB::table('roles')->where('name', 'candidate')->first()) {
+            Role::create(['name' => 'candidate']);
+        }
+        if (!DB::table('roles')->where('name', 'recruiter')->first()) {
+            Role::create(['name' => 'recruiter']);
+        }
+
+        /* Getting role */
+        if ($request->role == 1) {
+            $user->assignRole('candidate');
+        }
+        if ($request->role == 2) {
+            $user->assignRole('recruiter');
+        }
 
         event(new Registered($user));
 
