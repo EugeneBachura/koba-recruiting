@@ -25,7 +25,8 @@ return new class extends Migration
             $table->json('education'); //wykształcenie
             $table->json('skills'); //umiejętności
             $table->json('telephone'); //telefon
-            $table->string('email')->unique(); //email
+            $table->string('user_email'); // email
+            $table->foreign('user_email')->references('email')->on('users');
             $table->string('cv_link'); //cv link
             $table->json('cv_history'); //cv historia
             $table->timestamps(); // czas utworzenia i modyfikacji

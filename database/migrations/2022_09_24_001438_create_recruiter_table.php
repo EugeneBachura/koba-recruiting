@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('firm_name'); //nazwa firmy
             $table->string('position'); //stanowisko
             $table->json('telephone'); //telefon
-            $table->string('email')->unique(); //email
+            $table->string('user_email'); // email
+            $table->foreign('user_email')->references('email')->on('users');
             $table->timestamps(); //czas utworzenia i modyfikacji
         });
     }
