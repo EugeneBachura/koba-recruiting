@@ -8,6 +8,8 @@ import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 
 const form = useForm({
   role: 1,
+  first_name: "",
+  last_name: "",
   email: "",
   password: "",
   password_confirmation: "",
@@ -38,6 +40,32 @@ const submit = () => {
         <input type="radio" id="role2" value="2" v-model="form.role" />
         <label for="role2">Recruiter</label>
         <InputError class="mt-2" :message="form.errors.role" />
+      </div>
+
+      <div class="mt-4">
+        <InputLabel for="first_name" value="First Name" />
+        <TextInput
+          id="first_name"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.first_name"
+          required
+          autocomplete="username"
+        />
+        <InputError class="mt-2" :message="form.errors.first_name" />
+      </div>
+
+      <div class="mt-4">
+        <InputLabel for="last_name" value="Last Name" />
+        <TextInput
+          id="last_name"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.last_name"
+          required
+          autocomplete="username"
+        />
+        <InputError class="mt-2" :message="form.errors.last_name" />
       </div>
 
       <div class="mt-4">
