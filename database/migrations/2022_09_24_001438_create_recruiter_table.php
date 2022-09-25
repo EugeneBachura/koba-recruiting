@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recruiter', function (Blueprint $table) {
+        Schema::create('recruiters', function (Blueprint $table) {
             $table->id(); //id
             $table->foreignId('user_id')->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); // user
-            $table->string('first_name'); //imie
-            $table->string('last_name'); //nazwisko
-            $table->string('firm_name'); //nazwa firmy
-            $table->string('position'); //stanowisko
-            $table->json('telephone'); //telefon
+            $table->string('first_name')->nullable(); //imie
+            $table->string('last_name')->nullable(); //nazwisko
+            $table->string('firm_name')->nullable(); //nazwa firmy
+            $table->string('position')->nullable(); //stanowisko
+            $table->json('telephone')->nullable(); //telefon
             $table->string('user_email'); // email
             $table->foreign('user_email')->references('email')->on('users');
             $table->timestamps(); //czas utworzenia i modyfikacji

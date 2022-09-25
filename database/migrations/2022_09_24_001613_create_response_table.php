@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('response', function (Blueprint $table) {
             $table->id(); //id
-            $table->foreignId('candidate_id')->constrained('candidate')
+            $table->foreignId('candidate_id')->constrained('candidates')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); //kandydat
-            $table->foreignId('recruiter_id')->constrained('recruiter')
+            $table->foreignId('recruiter_id')->constrained('recruiters')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); //rekruter
             $table->string('status'); //status

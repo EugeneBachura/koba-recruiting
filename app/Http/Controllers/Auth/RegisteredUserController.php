@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
+use App\Models\Recruiter;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -55,15 +57,23 @@ class RegisteredUserController extends Controller
             Role::create(['name' => 'recruiter']);
         }
 
+        event(new Registered($user));
+
         /* Getting role */
         if ($request->role == 1) {
             $user->assignRole('candidate');
+            Candidate::create([
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+            ]);
         }
         if ($request->role == 2) {
             $user->assignRole('recruiter');
+            Recruiter::create([
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+            ]);
         }
-
-        event(new Registered($user));
 
         Auth::login($user);
 

@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('offer', function (Blueprint $table) {
             $table->id(); //id
             $table->string('position'); //stanowisko
-            $table->foreignId('recruiter_id')->constrained('recruiter')
+            $table->foreignId('recruiter_id')->constrained('recruiters')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); //rekruter
-            $table->string('level'); //poziom
-            $table->text('description'); //opis
-            $table->json('skills'); //umiejętności
+            $table->string('level')->nullable(); //poziom
+            $table->text('description')->nullable(); //opis
+            $table->json('skills')->nullable(); //umiejętności
             $table->boolean('active')->default(true); //aktywna
             $table->date('duration'); //czas trwania
             $table->timestamps(); //czas utworzenia i modyfikacji
