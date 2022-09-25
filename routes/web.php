@@ -1,8 +1,11 @@
 <?php
 
+use App\Models\Candidate;
+use App\Models\Recruiter;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +28,20 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $user = Auth::user();
+    $user_id = $user->id;
+    $role = $user->getRoleNames();
+    $user_data = null;
+    if ($user->hasRole('candidate')) {
+        $user_data = Candidate::where('user_id', $user_id)->first();
+    };
+    if ($user->hasRole('recruiter')) {
+        $user_data = Recruiter::where('user_id', $user_id)->first();
+    };
+    return view('dashboard/main', [
+        'user' => $user_data->only(['first_name', 'last_name', 'firm_name', 'position', 'telephone', 'user_email']),
+        'role' => $role,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
