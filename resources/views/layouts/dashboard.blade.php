@@ -21,6 +21,12 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
+            .avatar {
+              background-size: cover;
+              background-position: center;
+              height: 150px;
+              width: 150px;
+            }
         </style>
     </head>
     <body class="antialiased pt-4">
@@ -29,7 +35,6 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="{{route('main')}}" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Koba Task</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -191,26 +196,16 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>{{$user['first_name']}} {{$user['last_name']}}</h6>
-              <span>Web Designer</span>
+              <span>{{$user['user_email']}}</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{{ route('profile') }}">
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.index') }}">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
               </a>
             </li>
             <li>
@@ -257,7 +252,7 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('profile') }}">
+        <a class="nav-link collapsed" href="{{ route('profile.index') }}">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -300,7 +295,8 @@
     </div>
   </footer><!-- End Footer -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-  @vite('resources/assets/js/main.js')
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  @vite('resources/assets/js/jquery.maskedinput.min.js')
   @yield('scripts')
     </body>
 </html>

@@ -18,8 +18,9 @@ class Recruiter extends Model
         'first_name',
         'last_name',
         'firm_name',
+        'photo',
         'position',
-        'telephone' => 'array',
+        'telephone',
         'user_email',
     ];
 

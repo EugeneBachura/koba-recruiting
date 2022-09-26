@@ -18,12 +18,14 @@ class Candidate extends Model
         'first_name',
         'last_name',
         'date_of_birth',
+        'photo',
         'interests',
         'education',
+        'about',
         'skills',
         'telephone',
         'user_email',
-        'cv_link',
+        'cv',
         'cv_history',
     ];
 
