@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\DownloadCV;
+use App\Http\Controllers\EmailUpdate;
+use App\Http\Controllers\PasswordUpdate;
+use App\Http\Controllers\ProfileController;
 use App\Models\Candidate;
 use App\Models\Recruiter;
 use Illuminate\Foundation\Application;
@@ -46,20 +50,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 /* Profile */
-Route::get('/profile', function () {
-    /* Candidate */
-    if (Auth::user()->hasRole('candidate')) {
-        $user_data = Candidate::where('user_id', Auth::user()->id)->first();
-        return view('dashboard/profile', [
-            'user' => $user_data->only(['first_name', 'last_name', 'date_of_birth', 'interests', 'education', 'skills', 'telephone', 'cv_link', 'user_email', 'updated_at']),
-        ]);
-    }
-    /* Recruiter */
-    if (Auth::user()->hasRole('recruiter')) {
-        $user_data = Recruiter::where('user_id', Auth::user()->id)->first();
-        return view('dashboard/profile', []);
-    }
-})->middleware(['auth', 'verified'])->name('profile');
-
+Route::resource('profile', ProfileController::class)->middleware(['auth', 'verified'])->only([
+    'index', 'update'
+]);
+Route::put('/email-update', [EmailUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('email-update');
+Route::put('/password-update', [PasswordUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('password-update');
+Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth', 'verified'])->name('download-cv');
 
 require __DIR__ . '/auth.php';
