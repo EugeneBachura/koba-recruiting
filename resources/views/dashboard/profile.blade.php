@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Profile')
+@section('title', 'My Profile')
 @section('h1', 'Profile')
 
 @section('content')

@@ -249,14 +249,49 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-heading">Pages</li>
-
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('profile.index') }}">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
-      </li><!-- End Profile Page Nav -->
+      </li><!-- End Profile Nav -->
+
+      @role('candidate')
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('offers.index') }}">
+          <i class="bi bi-briefcase"></i>
+          <span>Offers</span>
+        </a>
+      </li>
+      @endrole
+
+      @role('recruiter')
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#offers-nav" data-bs-toggle="collapse" href="#" aria-expanded="false">
+          <i class="bi bi-briefcase"></i><span>Offers</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="offers-nav" class="nav-content collapse" data-bs-parent="#offers-nav">
+          <li>
+            <a href="{{ route('offers.index') }}">
+              <i class="bi bi-circle"></i><span>All Offers</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ route('offers.index') }}">
+              <i class="bi bi-circle"></i><span>My Offers</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ route('offers.index') }}">
+              <i class="bi bi-circle"></i><span>Create Offer</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      @endrole
+      <!-- End Offers Nav -->
+
+      <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="">

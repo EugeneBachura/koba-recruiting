@@ -26,7 +26,7 @@ class Candidate extends Model
         'telephone',
         'user_email',
         'cv',
-        'cv_history',
+        'cv_history' => 'array',
     ];
 
     /**
