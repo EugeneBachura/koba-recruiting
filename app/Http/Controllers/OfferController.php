@@ -7,6 +7,7 @@ use App\Models\Offer;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class OfferController extends Controller
 {
@@ -38,6 +39,17 @@ class OfferController extends Controller
      */
     public function create()
     {
+        $user_id = Auth::user()->id;
+        $user_data = null;
+        if (Auth::user()->hasRole('recruiter')) {
+            $user_data = Recruiter::where('user_id', $user_id)->first();
+        } else {
+            return abort(404);
+        }
+        return view('dashboard/offers/create', [
+            'user' => $user_data->only(['first_name', 'last_name', 'photo', 'user_email']),
+            'offers' => Offer::where('active', 1)->orderBy('created_at', 'ASC')->paginate(5),
+        ]);
     }
 
     /**
@@ -48,7 +60,36 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = Auth::user()->id;
+        if (Auth::user()->hasRole('recruiter')) {
+            $user_data = Recruiter::where('user_id', $user_id)->first();
+        } else {
+            return abort(404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'position' => 'required|string|max:255|min:3',
+            'level' => 'string|max:255|nullable',
+            'description' => 'required|string|max:65535|min:3',
+            'skills' => 'string|max:255|nullable',
+            'active' => 'required|boolean',
+            'duration' => ['required', 'string', 'nullable', 'date_format:Y-m-d', 'after:today'],
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        };
+
+        $offer = new Offer();
+        $offer->position = $request->position;
+        $offer->level = $request->level;
+        $offer->description = $request->description;
+        $offer->skills = $request->skills;
+        $offer->active = $request->active;
+        $offer->duration = $request->duration;
+        $offer->recruiter_id = $user_data->id;
+        $offer->save();
+
+        return redirect()->back()->withSuccess('Offer created successfully');
     }
 
     /**

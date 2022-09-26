@@ -282,7 +282,7 @@
             </a>
           </li>
           <li>
-            <a href="{{ route('offers.index') }}">
+            <a href="{{ route('offers.create') }}">
               <i class="bi bi-circle"></i><span>Create Offer</span>
             </a>
           </li>

@@ -94,7 +94,7 @@ class ProfileController extends Controller
             $request->validate([
                 'first_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'date_of_birth' => ['string', 'nullable', 'date_format:d/m/Y', 'before:today'],
+                'date_of_birth' => ['string', 'nullable', 'date_format:Y-m-d', 'before:today', 'after:1900-01-01'],
                 'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
                 'about' => 'string|max:255|nullable',
                 'interests' => 'string|max:255|nullable',
@@ -118,7 +118,7 @@ class ProfileController extends Controller
             if ($request->date_of_birth == null) {
                 $birth = null;
             } else {
-                $birth = date_create_from_format('!d/m/Y', $request->date_of_birth);
+                $birth = $request->date_of_birth;
             };
 
             $user_data->update([

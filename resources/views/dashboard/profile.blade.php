@@ -191,7 +191,7 @@
                   <div class="row mb-3">
                     <label for="date_of_birth" class="col-md-4 col-lg-3 col-form-label">Birthday</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="date_of_birth" type="text" class="form-control" id="date_of_birth" value="{{preg_replace("/(\d+)\D+(\d+)\D+(\d+)/","$3$2$1", $user['date_of_birth'])}}">
+                      <input name="date_of_birth" type="date" class="form-control" id="date_of_birth" value="{{preg_replace("/(\d+).D+(\d+).D+(\d+)/","$3$2$1", $user['date_of_birth'])}}">
                     </div>
                   </div>
                   @endrole
@@ -348,7 +348,7 @@
 @section('scripts')
   <script>
     $(function(){
-        $("#date_of_birth").mask("99/99/9999", {placeholder: "DD/MM/YYYY" });
+        // $("#date_of_birth").mask("99.99.9999", {placeholder: "DD.MM.YYYY" });
         $("#telephone").mask("999-999-999");
     });
   </script>
