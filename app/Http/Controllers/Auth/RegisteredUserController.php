@@ -40,8 +40,8 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'role' => 'required|numeric|regex:/[1,2]/',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -66,8 +66,8 @@ class RegisteredUserController extends Controller
             $user->assignRole('candidate');
             Candidate::create([
                 'user_id' => $user->id,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'first_name' => ucfirst(strtolower($request->first_name)),
+                'last_name' => ucfirst(strtolower($request->last_name)),
                 'user_email' => $user->email,
             ]);
         }
@@ -75,8 +75,8 @@ class RegisteredUserController extends Controller
             $user->assignRole('recruiter');
             Recruiter::create([
                 'user_id' => $user->id,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'first_name' => ucfirst(strtolower($request->first_name)),
+                'last_name' => ucfirst(strtolower($request->last_name)),
                 'user_email' => $user->email,
             ]);
         }

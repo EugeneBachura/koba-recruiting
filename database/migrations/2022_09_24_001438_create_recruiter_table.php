@@ -18,13 +18,16 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); // user
-            $table->string('first_name')->nullable(); //imie
-            $table->string('last_name')->nullable(); //nazwisko
+            $table->string('first_name'); //imie
+            $table->string('last_name'); //nazwisko
             $table->string('firm_name')->nullable(); //nazwa firmy
+            $table->string('photo')->nullable(); //zdjecie
             $table->string('position')->nullable(); //stanowisko
-            $table->json('telephone')->nullable(); //telefon
+            $table->string('telephone')->nullable(); //telefon
             $table->string('user_email'); // email
-            $table->foreign('user_email')->references('email')->on('users');
+            $table->foreign('user_email')->references('email')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps(); //czas utworzenia i modyfikacji
         });
     }
