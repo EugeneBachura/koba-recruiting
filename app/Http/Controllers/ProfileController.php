@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Candidate;
 use App\Models\Recruiter;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -22,14 +23,15 @@ class ProfileController extends Controller
         if (Auth::user()->hasRole('candidate')) {
             $user_data = Candidate::where('user_id', Auth::user()->id)->first();
             return view('dashboard/profile', [
-                'user' => $user_data->only(['id', 'first_name', 'last_name', 'date_of_birth', 'photo', 'about', 'interests', 'education', 'skills', 'telephone', 'cv', 'user_email', 'updated_at']),
-                'id' => Auth::user()->id
+                'user' => $user_data->only(['id', 'first_name', 'last_name', 'date_of_birth', 'photo', 'about', 'interests', 'education', 'skills', 'telephone', 'cv', 'user_email'])
             ]);
         }
         /* Recruiter */
         if (Auth::user()->hasRole('recruiter')) {
             $user_data = Recruiter::where('user_id', Auth::user()->id)->first();
-            return view('dashboard/profile', []);
+            return view('dashboard/profile', [
+                'user' => $user_data->only(['id', 'first_name', 'last_name', 'firm_name', 'photo', 'position', 'telephone', 'user_email']),
+            ]);
         }
     }
 
@@ -85,55 +87,86 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-            'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-            'date_of_birth' => ['string', 'nullable', 'date_format:d/m/Y', 'before:today'],
-            'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
-            'about' => 'string|max:255|nullable',
-            'interests' => 'string|max:255|nullable',
-            'education' => 'string|max:255|nullable',
-            'skills' => 'string|max:255|nullable',
-            'telephone' => 'string|max:11|nullable',
-            'cv' => 'file|mimes:pdf,doc,docx|max:2048|nullable',
-        ]);
+        $user = Auth::user();
 
-        $candidate = Candidate::where('id', $id)->first();
+        /* Candidate update profile */
+        if ($user->hasRole('candidate')) {
+            $request->validate([
+                'first_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'date_of_birth' => ['string', 'nullable', 'date_format:d/m/Y', 'before:today'],
+                'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
+                'about' => 'string|max:255|nullable',
+                'interests' => 'string|max:255|nullable',
+                'education' => 'string|max:255|nullable',
+                'skills' => 'string|max:255|nullable',
+                'telephone' => 'string|max:11|nullable',
+                'cv' => 'file|mimes:pdf,doc,docx|max:2048|nullable',
+            ]);
 
+            $user_data = Candidate::where('id', $id)->first();
+
+            /* Upload CV */
+            if ($request->hasFile('cv')) {
+                $path = Storage::putFile('public/cv', $request->file('cv'));
+                $user_data->update([
+                    'cv' => $path,
+                ]);
+            }
+
+            /* Format date of birth */
+            if ($request->date_of_birth == null) {
+                $birth = null;
+            } else {
+                $birth = date_create_from_format('!d/m/Y', $request->date_of_birth);
+            };
+
+            $user_data->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'date_of_birth' => $birth,
+                'about' => $request->about,
+                'interests' => $request->interests,
+                'education' => $request->education,
+                'skills' => $request->skills,
+                'telephone' => $request->telephone
+            ]);
+        };
+
+        /* Recruiter update profile */
+        if ($user->hasRole('recruiter')) {
+            $request->validate([
+                'first_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
+                'firm_name' => 'string|max:255|nullable',
+                'position' => 'string|max:255|nullable',
+                'telephone' => 'string|max:11|nullable',
+            ]);
+
+            $user_data = Recruiter::where('id', $id)->first();
+
+            $user_data->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'firm_name' => $request->firm_name,
+                'position' => $request->position,
+                'telephone' => $request->telephone
+            ]);
+        };
+
+        /* Update photo */
         if ($request->hasFile('photo')) {
             $path = Storage::putFile('public/avatars', $request->file('photo'));
-            $photo = Candidate::where('id', $id)->first()->photo;
+            $photo = $user_data->photo;
             if (!is_null($photo) && Storage::exists($photo)) { // delete old photo
                 Storage::delete($photo);
             }
-            $candidate->update([
+            $user_data->update([
                 'photo' => $path,
             ]);
         }
 
-        if ($request->hasFile('cv')) {
-            $path = Storage::putFile('public/cv', $request->file('cv'));
-            $candidate->update([
-                'cv' => $path,
-            ]);
-        }
-
-        if ($request->date_of_birth == null) { // format date
-            $birth = null;
-        } else {
-            $birth = date_create_from_format('!d/m/Y', $request->date_of_birth);
-        };
-
-        $candidate->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'date_of_birth' => $birth,
-            'about' => $request->about,
-            'interests' => $request->interests,
-            'education' => $request->education,
-            'skills' => $request->skills,
-            'telephone' => $request->telephone
-        ]);
         return redirect()->back()->withSuccess('Profile updated successfully');
     }
 

@@ -31,7 +31,7 @@
                     <div class="avatar rounded-circle" style="background-image:url('{{Storage::url('public/avatars/_cuser.png')}}');" alt="Profile"></div>
                 @endrole
                 @role('recruiter')
-                    <div class="avatar rounded-circle" style="background-image:url('{{Storage::url('public/avatars  /_ruser.png')}}');" alt="Profile"></div>
+                    <div class="avatar rounded-circle" style="background-image:url('{{Storage::url('public/avatars/_ruser.png')}}');" alt="Profile"></div>
                 @endrole
             @endif
             <h2 class="d-flex align-items-center text-center">{{$user['first_name']}} {{$user['last_name']}}</h2>
@@ -68,10 +68,12 @@
             <div class="tab-content pt-2">
 
               <div class="tab-pane fade profile-overview active show" id="profile-overview" role="tabpanel">
-                @if ($user['about'])
-                    <h5 class="card-title">About</h5>
-                    <p class="small fst-italic">{{$user['about']}}</p>
-                @endif
+                @role('candidate')
+                    @if ($user['about'])
+                        <h5 class="card-title">About</h5>
+                        <p class="small fst-italic">{{$user['about']}}</p>
+                    @endif
+                @endrole
 
                 <h5 class="card-title">Profile Details</h5>
 
@@ -80,33 +82,59 @@
                   <div class="col-lg-9 col-md-8">{{$user['first_name']}} {{$user['last_name']}}</div>
                 </div>
 
+                @role('candidate')
                 @if ($user['date_of_birth'])
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Birthday</div>
                     <div class="col-lg-9 col-md-8">{{preg_replace("/(\d+)\D+(\d+)\D+(\d+)/","$3/$2/$1", $user['date_of_birth'])}}</div>
                   </div>
                 @endif
+                @endrole
 
+                @role('candidate')
                 @if ($user['interests'])
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Interests</div>
                     <div class="col-lg-9 col-md-8">{{$user['interests']}}</div>
                   </div>
                 @endif
+                @endrole
                 
+                @role('candidate')
                 @if ($user['education'] )
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Education</div>
                     <div class="col-lg-9 col-md-8">{{$user['education']}}</div>
                   </div>
                 @endif
+                @endrole
 
+                @role('candidate')
                 @if ($user['skills'])
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Skills</div>
                     <div class="col-lg-9 col-md-8">{{$user['skills']}}</div>
                   </div>
                 @endif
+                @endrole
+
+                @role('recruiter')
+                @if ($user['firm_name'])
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Firm Name</div>
+                    <div class="col-lg-9 col-md-8">{{$user['firm_name']}}</div>
+                  </div>
+                @endif
+                @endrole
+
+                @role('recruiter')
+                @if ($user['position'])
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Position</div>
+                    <div class="col-lg-9 col-md-8">{{$user['position']}}</div>
+                  </div>
+                @endif
+                @endrole
 
                 @if ($user['telephone'])
                   <div class="row">
@@ -120,14 +148,15 @@
                   <div class="col-lg-9 col-md-8">{{$user['user_email']}}</div>
                 </div>
 
+                @role('candidate')
                 <div class="row mb-0">
                     <div><a type="button" class="btn btn-outline-primary" href="{{route('download-cv', $user['id'])}}"><i class="bi bi-download me-1"></i> Download CV</a></div>
                 </div>
+                @endrole
 
               </div>
 
               <div class="tab-pane fade profile-edit pt-3" id="profile-edit" role="tabpanel">
-                @role('candidate')
                 <!-- Profile Edit Form for Candidate -->
                 <form action="{{ route('profile.update', $user['id']) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -158,40 +187,68 @@
                     </div>
                   </div>
 
+                  @role('candidate')
                   <div class="row mb-3">
                     <label for="date_of_birth" class="col-md-4 col-lg-3 col-form-label">Birthday</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="date_of_birth" type="text" class="form-control" id="date_of_birth" value="{{preg_replace("/(\d+)\D+(\d+)\D+(\d+)/","$3$2$1", $user['date_of_birth'])}}">
                     </div>
                   </div>
+                  @endrole
 
+                  @role('candidate')
                   <div class="row mb-3">
                     <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
                     <div class="col-md-8 col-lg-9">
                       <textarea name="about" class="form-control" id="about" style="height: 100px">{{$user['about']}}</textarea>
                     </div>
                   </div>
+                    @endrole
 
+                    @role('candidate')
                   <div class="row mb-3">
                     <label for="interests" class="col-md-4 col-lg-3 col-form-label">Interests</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="interests" type="text" class="form-control" id="interests" value="{{$user['interests']}}">
                     </div>
                   </div>
+                    @endrole
 
+                    @role('candidate')
                   <div class="row mb-3">
                     <label for="education" class="col-md-4 col-lg-3 col-form-label">Education</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="education" type="text" class="form-control" id="education" value="{{$user['education']}}">
                     </div>
                   </div>
+                    @endrole
 
+                    @role('candidate')
                   <div class="row mb-3">
                     <label for="skills" class="col-md-4 col-lg-3 col-form-label">Skills</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="skills" type="text" class="form-control" id="skills" value="{{$user['skills']}}">
                     </div>
                   </div>
+                    @endrole
+
+                    @role('recruiter')
+                    <div class="row mb-3">
+                        <label for="firm_name" class="col-md-4 col-lg-3 col-form-label">Firm Name</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input name="firm_name" type="text" class="form-control" id="firm_name" value="{{$user['firm_name']}}">
+                        </div>
+                    </div>
+                    @endrole
+
+                    @role('recruiter')
+                    <div class="row mb-3">
+                        <label for="position" class="col-md-4 col-lg-3 col-form-label">Position</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input name="position" type="text" class="form-control" id="position" value="{{$user['position']}}">
+                        </div>
+                    </div>
+                    @endrole
 
                   <div class="row mb-3">
                     <label for="telephone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
@@ -200,6 +257,7 @@
                     </div>
                   </div>
 
+                  @role('candidate')
                   <div class="row mb-3">
                     <label for="cv" class="col-md-4 col-lg-3 col-form-label">CV File</label>
                     <div class="col-md-8 col-lg-9">
@@ -211,12 +269,12 @@
                       </div>
                     </div>
                   </div>
+                    @endrole
 
                   <div class="text-center">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                   </div>
                 </form><!-- End Profile Edit Form for Candidate -->
-                @endrole
               </div>
 
               <div class="tab-pane fade pt-3" id="profile-change-email" role="tabpanel">
