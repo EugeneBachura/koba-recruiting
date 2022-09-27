@@ -15,7 +15,7 @@
         </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-        @vite('resources/assets/css/style.css')
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         @yield('styles')
         <style>
             body {
@@ -189,19 +189,10 @@
     @yield('content')
 
   </main><!-- End #main -->
-
-  {{-- <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span> -- </span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      Created by <a href="https://github.com/EugeneBachura/">Eugene Bachura</a>
-    </div>
-  </footer><!-- End Footer --> --}}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-  @vite('resources/assets/js/jquery.maskedinput.min.js')
+  <script src="{{ asset('js/main.js') }}"></script>
+  <script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
   @yield('scripts')
     </body>
 </html>
