@@ -30,7 +30,6 @@ class HistoryCV extends Controller
             $cv_history = json_decode($user_data->cv_history, true);
             $cv_history = array_reverse($cv_history);
             $cv = $cv_history[$num - 1];
-            return $cv['path'];
             return Storage::download($cv['path'], $cv['name']);
         } else {
             abort(404);
