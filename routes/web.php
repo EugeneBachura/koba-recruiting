@@ -61,7 +61,7 @@ Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth',
 
 /* Offers */
 Route::resource('offers', OfferController::class)->middleware(['auth', 'verified'])->only([
-    'index', 'create', 'store',  'edit', 'update', 'destroy'
+    'index', 'create', 'store',  'show', 'edit', 'update', 'destroy'
 ]);
 Route::get('/my-offers/{id}', [OfferFilterController::class, 'myOffers'])->middleware(['auth', 'verified'])->name('my_offers');
 

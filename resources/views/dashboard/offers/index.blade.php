@@ -25,21 +25,30 @@
     @endif
     @foreach ($offers as $offer)
         <div class="card">
-            <div class="card-header">{{
+            <div class="card-header d-flex justify-content-between align-items-center"><div>{{
                 Recruiter::where('id', $offer['recruiter_id'])->first()->firm_name
                 }}</div>
+                <div>
+                    <a href="{{ route('offers.show', $offer['id']) }}" class="btn btn-primary btn-sm" title="Show"><i class="bi bi-eye"></i></a>
+                </div>
+            </div>
             <div class="card-body">
             <h5 class="card-title">{{$offer['position']}}</h5>
-            <p>{{$offer['description']}}</p>
+            @if ($offer['description'])
+                <p class="card-text">{{$offer['description']}}</p>
+            @endif
             @if ($offer['level'])
-                <p>Level: {{$offer['level']}}</p>
+                <p class="card-text">Level: {{$offer['level']}}</p>
             @endif
             @if ($offer['skills'])
-                <p>Skills: {{$offer['skills']}}</p>
+                <p class="card-text">Skills: {{$offer['skills']}}</p>
             @endif
             </div>
-            <div class="card-footer text-end">
-                Duration: {{$offer['duration']}}
+            
+            <div class="card-footer d-flex justify-content-end align-items-center">
+                @if ($offer['duration'])
+                    <div>Duration: {{$offer['duration']}}</div>
+                @endif
             </div>
         </div>
     @endforeach

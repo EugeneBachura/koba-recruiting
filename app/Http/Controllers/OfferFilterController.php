@@ -20,7 +20,7 @@ class OfferFilterController extends Controller
         }
         return view('dashboard/offers/show_my', [
             'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email', 'firm_name']),
-            'offers' => Offer::where('recruiter_id', $user_data->id)->orderBy('created_at', 'ASC')->paginate(10),
+            'offers' => Offer::where('recruiter_id', $user_data->id)->orderBy('updated_at', 'DESC')->paginate(10),
         ]);
     }
 }

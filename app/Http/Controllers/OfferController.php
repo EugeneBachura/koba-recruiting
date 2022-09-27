@@ -26,9 +26,12 @@ class OfferController extends Controller
         if (Auth::user()->hasRole('recruiter')) {
             $user_data = Recruiter::where('user_id', $user_id)->first();
         }
+        if (!Auth::user()->hasRole('candidate|recruiter')) {
+            return abort(404);
+        }
         return view('dashboard/offers/index', [
             'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email']),
-            'offers' => Offer::where('active', 1)->orderBy('created_at', 'ASC')->paginate(10),
+            'offers' => Offer::where('active', 1)->orderBy('updated_at', 'DESC')->paginate(10),
         ]);
     }
 
@@ -100,7 +103,18 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        //
+        $user_id = Auth::user()->id;
+        $user_data = null;
+        if (Auth::user()->hasRole('candidate')) {
+            $user_data = Candidate::where('user_id', $user_id)->first();
+        }
+        if (Auth::user()->hasRole('recruiter')) {
+            $user_data = Recruiter::where('user_id', $user_id)->first();
+        }
+        return view('dashboard/offers/show', [
+            'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email']),
+            'offer' => Offer::where('id', $id)->first(),
+        ]);
     }
 
     /**
