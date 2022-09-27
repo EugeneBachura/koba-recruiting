@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DownloadCV;
+use App\Http\Controllers\HistoryCV;
 use App\Http\Controllers\EmailUpdate;
 use App\Http\Controllers\PasswordUpdate;
 use App\Http\Controllers\ProfileController;
@@ -58,7 +59,6 @@ Route::resource('profile', ProfileController::class)->middleware(['auth', 'verif
 ]);
 Route::put('/email-update', [EmailUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('email-update');
 Route::put('/password-update', [PasswordUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('password-update');
-Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth', 'verified'])->name('download-cv');
 
 /* Offers */
 Route::resource('offers', OfferController::class)->middleware(['auth', 'verified'])->only([
@@ -70,5 +70,9 @@ Route::get('/my-offers/{id}', [OfferFilterController::class, 'myOffers'])->middl
 Route::resource('responses', ResponseController::class)->middleware(['auth', 'verified'])->only([
     'index', 'store', 'show', 'update'
 ]);
+
+/* CV */
+Route::get('/cv/history', [HistoryCV::class, 'index'])->middleware(['auth', 'verified'])->name('history-cv');
+Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth', 'verified'])->name('download-cv');
 
 require __DIR__ . '/auth.php';

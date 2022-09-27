@@ -157,15 +157,18 @@
           <i class="bi bi-file-earmark-text"></i>
           <span>Responses</span>
         </a>
+      </li>
+      <!-- End Responses Nav -->
 
-      <li class="nav-heading">Pages</li>
-
+      @role('candidate')
       <li class="nav-item">
-        <a class="nav-link collapsed" href="">
-          <i class="bi bi-question-circle"></i>
-          <span>F.A.Q</span>
+        <a class="nav-link collapsed" href="{{ route('history-cv') }}">
+          <i class="bi bi-clock-history"></i>
+          <span>History CV</span>
         </a>
-      </li><!-- End F.A.Q Page Nav -->
+      </li>
+      <!-- End History CV Nav -->
+      @endrole
 
     </ul>
 

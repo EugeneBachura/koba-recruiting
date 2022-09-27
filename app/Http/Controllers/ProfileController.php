@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Candidate;
 use App\Models\Recruiter;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -142,11 +143,28 @@ class ProfileController extends Controller
 
             $user_data = Candidate::where('id', $id)->first();
 
+
             /* Upload CV */
             if ($request->hasFile('cv')) {
                 $path = Storage::putFile('public/cv', $request->file('cv'));
+                $cv_history = $user_data->cv_history;
+
+                if ($cv_history == null) {
+                    $cv_history = [];
+                } else {
+                    $cv_history = json_decode($cv_history);
+                }
+                $cv_history_data = [
+                    'path' => $path,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'size' => Storage::size($path),
+                    'name' => $request->file('cv')->getClientOriginalName()
+                ];
+
+                $cv_history[] = $cv_history_data;
                 $user_data->update([
                     'cv' => $path,
+                    'cv_history' => json_encode($cv_history)
                 ]);
             }
 
