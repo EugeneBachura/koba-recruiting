@@ -105,14 +105,24 @@ class ResponseController extends Controller
         $user_id = Auth::user()->id;
         $user_data = null;
         $response = Response::where('id', $id)->first();
+
         /* Candidate */
         if (Auth::user()->hasRole('candidate')) {
+            if (Candidate::where('user_id', $user_id)->first()->id != $response->candidate_id) {
+                return abort(404);
+            }
             $user_data = Candidate::where('user_id', $user_id)->first();
         }
         /* Recruiter */
         if (Auth::user()->hasRole('recruiter')) {
+            if (Recruiter::where('user_id', $user_id)->first()->id != $response->recruiter_id) {
+                return abort(404);
+            }
             $user_data = Recruiter::where('user_id', $user_id)->first();
-            $response->update(['status' => 'viewed']);
+            if ($response->status == 'responded') {
+                $response->status = 'viewed';
+                $response->save();
+            }
         }
 
         return view('dashboard/response/show', [
@@ -141,7 +151,34 @@ class ResponseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (!Response::where('id', $id)->exists()) { //check if response exists
+            return abort(404);
+        }
+
+        $user_id = Auth::user()->id;
+        $response = Response::where('id', $id)->first();
+
+        /* Recruiter */
+        if (Auth::user()->hasRole('recruiter')) {
+            if (Recruiter::where('user_id', $user_id)->first()->id != $response->recruiter_id) {
+                return abort(404);
+            }
+        } else {
+            return abort(404);
+        }
+
+        /* Validate the request */
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:denied,invited'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        };
+
+        $response->status = $request->status;
+        $response->save();
+
+        return redirect()->back()->withSuccess('Response changed status successfully');
     }
 
     /**
