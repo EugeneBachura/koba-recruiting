@@ -11,8 +11,6 @@ class DownloadCV extends Controller
 {
     /**
      * Download the CV.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function downloadById($id)
     {

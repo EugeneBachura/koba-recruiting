@@ -46,13 +46,6 @@
         <div class="card">
           <div class="card-body pt-3">
             <!-- Bordered Tabs -->
-            <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
-
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Overview</button>
-              </li>
-
-            </ul>
             <div class="tab-content pt-2">
 
               <div class="tab-pane fade profile-overview active show" id="profile-overview" role="tabpanel">
@@ -62,8 +55,6 @@
                         <p class="small fst-italic">{{$profile['about']}}</p>
                     @endif
                 @endif
-
-                <h5 class="card-title">Profile Details</h5>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label ">Full Name</div>

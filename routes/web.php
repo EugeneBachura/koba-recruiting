@@ -73,6 +73,7 @@ Route::resource('responses', ResponseController::class)->middleware(['auth', 've
 
 /* CV */
 Route::get('/cv/history', [HistoryCV::class, 'index'])->middleware(['auth', 'verified'])->name('history-cv');
+Route::get('/cv/history/download/{num}', [HistoryCV::class, 'download'])->middleware(['auth', 'verified'])->name('history-cv-download');
 Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth', 'verified'])->name('download-cv');
 
 require __DIR__ . '/auth.php';

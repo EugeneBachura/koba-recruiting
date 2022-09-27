@@ -37,6 +37,7 @@
                     <th scope="col">Name File</th>
                     <th scope="col">Seze File</th>
                     <th scope="col">Upload Date</th>
+                    <th scope="col">Download</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +50,8 @@
                     <td>{{$cv['name']}}</td>
                     <td>{{$cv['size']/1000}} KB</td>
                     <td>{{$cv['created_at']}}</td>
+                    <td><a href="{{route('history-cv-download', $k)}}" class="btn btn-primary">Download</a></td>
+                    </td>
                 </tr>
             @endforeach
             </tbody>

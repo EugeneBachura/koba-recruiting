@@ -147,21 +147,27 @@ class ProfileController extends Controller
             /* Upload CV */
             if ($request->hasFile('cv')) {
                 $path = Storage::putFile('public/cv', $request->file('cv'));
-                $cv_history = $user_data->cv_history;
 
+                /* CV history */
+                $cv_history = $user_data->cv_history;
                 if ($cv_history == null) {
                     $cv_history = [];
                 } else {
                     $cv_history = json_decode($cv_history);
                 }
+                if (count($cv_history) > 10) { //max 10 cv history
+                    Storage::delete($cv_history[0]->path);
+                    array_shift($cv_history);
+                }
                 $cv_history_data = [
-                    'path' => $path,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'path' => $path,
                     'size' => Storage::size($path),
                     'name' => $request->file('cv')->getClientOriginalName()
                 ];
-
                 $cv_history[] = $cv_history_data;
+                /* End CV history */
+
                 $user_data->update([
                     'cv' => $path,
                     'cv_history' => json_encode($cv_history)
