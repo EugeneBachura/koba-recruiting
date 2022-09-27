@@ -50,7 +50,7 @@
                     <td>{{$cv['name']}}</td>
                     <td>{{$cv['size']/1000}} KB</td>
                     <td>{{$cv['created_at']}}</td>
-                    <td><a href="{{route('history-cv-download', $k)}}" class="btn btn-primary">Download</a></td>
+                    <td><a href="{{route('history-cv-download', $k)}}" class="btn btn-primary btn-sm">Download</a></td>
                     </td>
                 </tr>
             @endforeach
