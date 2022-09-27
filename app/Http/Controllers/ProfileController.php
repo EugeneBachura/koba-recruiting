@@ -33,6 +33,7 @@ class ProfileController extends Controller
                 'user' => $user_data->only(['id', 'first_name', 'last_name', 'firm_name', 'photo', 'position', 'telephone', 'user_email']),
             ]);
         }
+        return abort(404);
     }
 
     /**
@@ -64,7 +65,42 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        //
+        //exist user
+        if (!User::where('id', $id)->exists()) {
+            return abort(404);
+        }
+
+        $user_show = User::where('id', $id)->first();
+        $role = null;
+        $user_show_data = null;
+        if ($user_show->hasRole('candidate')) {
+            $user_show_data = Candidate::where('user_id', $user_show->id)->first()->only(['id', 'first_name', 'last_name', 'date_of_birth', 'photo', 'about', 'interests', 'education', 'skills', 'telephone', 'cv', 'user_email']);
+            $role = 'candidate';
+        }
+        if ($user_show->hasRole('recruiter')) {
+            $user_show_data = Recruiter::where('user_id', $user_show->id)->first()->only(['id', 'first_name', 'last_name', 'firm_name', 'photo', 'position', 'telephone', 'user_email']);
+            $role = 'recruiter';
+        }
+
+        /* Candidate */
+        if (Auth::user()->hasRole('candidate')) {
+            $user_data = Candidate::where('user_id', Auth::user()->id)->first();
+            return view('dashboard/profile_by_id', [
+                'user' => $user_data->only(['id', 'first_name', 'last_name', 'date_of_birth', 'photo', 'about', 'interests', 'education', 'skills', 'telephone', 'cv', 'user_email']),
+                'profile' => $user_show_data,
+                'role' => $role
+            ]);
+        }
+        /* Recruiter */
+        if (Auth::user()->hasRole('recruiter')) {
+            $user_data = Recruiter::where('user_id', Auth::user()->id)->first();
+            return view('dashboard/profile_by_id', [
+                'user' => $user_data->only(['id', 'first_name', 'last_name', 'firm_name', 'photo', 'position', 'telephone', 'user_email']),
+                'profile' => $user_show_data,
+                'role' => $role
+            ]);
+        }
+        return abort(404);
     }
 
     /**

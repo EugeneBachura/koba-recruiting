@@ -6,6 +6,7 @@ use App\Http\Controllers\PasswordUpdate;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OfferFilterController;
+use App\Http\Controllers\ResponseController;
 use App\Models\Candidate;
 use App\Models\Recruiter;
 use Illuminate\Foundation\Application;
@@ -53,7 +54,7 @@ Route::get('/dashboard', function () {
 
 /* Profile */
 Route::resource('profile', ProfileController::class)->middleware(['auth', 'verified'])->only([
-    'index', 'update'
+    'index', 'update', 'show'
 ]);
 Route::put('/email-update', [EmailUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('email-update');
 Route::put('/password-update', [PasswordUpdate::class, 'update'])->middleware(['auth', 'verified'])->name('password-update');

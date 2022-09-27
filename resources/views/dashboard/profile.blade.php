@@ -149,9 +149,11 @@
                 </div>
 
                 @role('candidate')
-                <div class="row mb-0">
-                    <div><a type="button" class="btn btn-outline-primary" href="{{route('download-cv', $user['id'])}}"><i class="bi bi-download me-1"></i> Download CV</a></div>
-                </div>
+                @if ($user['cv']) 
+                    <div class="row mb-0">
+                        <div><a type="button" class="btn btn-outline-primary" href="{{route('download-cv', $user['id'])}}"><i class="bi bi-download me-1"></i> Download CV</a></div>
+                    </div>
+                @endif
                 @endrole
 
               </div>
