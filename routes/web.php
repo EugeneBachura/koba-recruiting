@@ -5,6 +5,7 @@ use App\Http\Controllers\EmailUpdate;
 use App\Http\Controllers\PasswordUpdate;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\OfferFilterController;
 use App\Models\Candidate;
 use App\Models\Recruiter;
 use Illuminate\Foundation\Application;
@@ -38,14 +39,14 @@ Route::get('/dashboard', function () {
     if (Auth::user()->hasRole('candidate')) {
         $user_data = Candidate::where('user_id', Auth::user()->id)->first();
         return view('dashboard/main', [
-            'user' => $user_data->only(['first_name', 'last_name', 'user_email']),
+            'user' => $user_data->only(['id', 'first_name', 'last_name', 'user_email']),
         ]);
     }
     /* Recruiter */
     if (Auth::user()->hasRole('recruiter')) {
         $user_data = Recruiter::where('user_id', Auth::user()->id)->first();
         return view('dashboard/main', [
-            'user' => $user_data->only(['first_name', 'last_name', 'user_email']),
+            'user' => $user_data->only(['id', 'first_name', 'last_name', 'user_email']),
         ]);
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -60,7 +61,8 @@ Route::get('/cv/{id}', [DownloadCV::class, 'downloadById'])->middleware(['auth',
 
 /* Offers */
 Route::resource('offers', OfferController::class)->middleware(['auth', 'verified'])->only([
-    'index', 'create', 'store', 'show', 'update', 'destroy'
+    'index', 'create', 'store',  'edit', 'update', 'destroy'
 ]);
+Route::get('/my-offers/{id}', [OfferFilterController::class, 'myOffers'])->middleware(['auth', 'verified'])->name('my_offers');
 
 require __DIR__ . '/auth.php';

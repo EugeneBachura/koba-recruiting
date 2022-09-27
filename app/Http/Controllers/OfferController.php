@@ -27,8 +27,8 @@ class OfferController extends Controller
             $user_data = Recruiter::where('user_id', $user_id)->first();
         }
         return view('dashboard/offers/index', [
-            'user' => $user_data->only(['first_name', 'last_name', 'photo', 'user_email']),
-            'offers' => Offer::where('active', 1)->orderBy('created_at', 'ASC')->paginate(5),
+            'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email']),
+            'offers' => Offer::where('active', 1)->orderBy('created_at', 'ASC')->paginate(10),
         ]);
     }
 
@@ -47,8 +47,7 @@ class OfferController extends Controller
             return abort(404);
         }
         return view('dashboard/offers/create', [
-            'user' => $user_data->only(['first_name', 'last_name', 'photo', 'user_email']),
-            'offers' => Offer::where('active', 1)->orderBy('created_at', 'ASC')->paginate(5),
+            'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email']),
         ]);
     }
 
@@ -67,6 +66,7 @@ class OfferController extends Controller
             return abort(404);
         }
 
+        /* Validate the data */
         $validator = Validator::make($request->all(), [
             'position' => 'required|string|max:255|min:3',
             'level' => 'string|max:255|nullable',
@@ -111,7 +111,21 @@ class OfferController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user_id = Auth::user()->id;
+        $user_data = null;
+        if (Auth::user()->hasRole('recruiter')) {
+            $user_data = Recruiter::where('user_id', $user_id)->first();
+        } else {
+            return abort(404);
+        }
+        if (Offer::where('id', $id)->where('recruiter_id', $user_data->id)->exists()) {
+            return view('dashboard/offers/edit', [
+                'user' => $user_data->only(['id', 'first_name', 'last_name', 'photo', 'user_email']),
+                'offer' => Offer::where('id', $id)->where('recruiter_id', $user_data->id)->first(),
+            ]);
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -123,7 +137,39 @@ class OfferController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Offer::where('id', $id)->exists()) { //check if offer exists
+            $offer = Offer::find($id);
+            if ($offer->recruiter_id === Recruiter::where('user_id', Auth::user()->id)->first()->id) { // update only this recruiter's offers
+
+                /* Validate the data */
+                $validator = Validator::make($request->all(), [
+                    'position' => 'required|string|max:255|min:3',
+                    'level' => 'string|max:255|nullable',
+                    'description' => 'required|string|max:65535|min:3',
+                    'skills' => 'string|max:255|nullable',
+                    'active' => 'required|boolean',
+                    'duration' => ['required', 'string', 'nullable', 'date_format:Y-m-d', 'after:today'],
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                };
+
+                /* Update */
+                $offer->position = $request->position;
+                $offer->level = $request->level;
+                $offer->description = $request->description;
+                $offer->skills = $request->skills;
+                $offer->active = $request->active;
+                $offer->duration = $request->duration;
+                $offer->save();
+
+                return redirect()->back()->withSuccess('Offer updated successfully');
+            } else {
+                return abort(404);
+            }
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -134,6 +180,16 @@ class OfferController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Offer::where('id', $id)->exists()) { //check if offer exists
+            $offer = Offer::find($id);
+            if ($offer->recruiter_id === Recruiter::where('user_id', Auth::user()->id)->first()->id) { // delete only created by this recruiter
+                $offer->delete();
+                return redirect()->back()->withSuccess('Offer deleted successfully');
+            } else {
+                return abort(404);
+            }
+        } else {
+            return abort(404);
+        }
     }
 }

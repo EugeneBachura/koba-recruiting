@@ -83,7 +83,7 @@
             </div>
 
             <div class="row mb-3">
-              <div class="col-sm-12">
+              <div class="col-sm-12 d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">Create</button>
               </div>
             </div>

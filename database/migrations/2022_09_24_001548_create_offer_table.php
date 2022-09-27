@@ -21,7 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade'); //rekruter
             $table->string('level')->nullable(); //poziom
             $table->text('description')->nullable(); //opis
-            $table->json('skills')->nullable(); //umiejętności
+            $table->string('skills')->nullable(); //umiejętności
             $table->boolean('active')->default(true); //aktywna
             $table->date('duration'); //czas trwania
             $table->timestamps(); //czas utworzenia i modyfikacji
