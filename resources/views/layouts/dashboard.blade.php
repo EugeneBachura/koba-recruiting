@@ -155,7 +155,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('responses.index') }}">
           <i class="bi bi-file-earmark-text"></i>
-          <span>Responses</span>
+          <span>Applications</span>
         </a>
       </li>
       <!-- End Responses Nav -->

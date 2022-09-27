@@ -69,6 +69,11 @@ const submit = () => {
       </div>
 
       <div class="flex items-center justify-end mt-4">
+        <Link
+          :href="route('register')"
+          class="underline text-sm text-gray-600 hover:text-gray-900"
+          >Register</Link
+        >
         <PrimaryButton
           class="ml-4"
           :class="{ 'opacity-25': form.processing }"

@@ -28,17 +28,30 @@ const submit = () => {
     <Head title="Register" />
 
     <form @submit.prevent="submit">
-      <div>
-        <input
-          type="radio"
-          id="role1"
-          value="1"
-          v-model="form.role"
-          checked="checked"
-        />
-        <label for="role1">Candidate</label>
-        <input type="radio" id="role2" value="2" v-model="form.role" />
-        <label for="role2">Recruiter</label>
+      <div
+        style="display: flex; justify-content: space-evenly; margin-top: 10px"
+      >
+        <div style="display: flex; align-items: center">
+          <input
+            type="radio"
+            id="role1"
+            value="1"
+            v-model="form.role"
+            checked="checked"
+            style="margin-right: 5px"
+          />
+          <label for="role1">Candidate</label>
+        </div>
+        <div style="display: flex; align-items: center">
+          <input
+            type="radio"
+            id="role2"
+            value="2"
+            v-model="form.role"
+            style="margin-right: 5px"
+          />
+          <label for="role2">Recruiter</label>
+        </div>
         <InputError class="mt-2" :message="form.errors.role" />
       </div>
 

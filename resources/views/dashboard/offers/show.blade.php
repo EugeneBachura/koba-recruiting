@@ -63,7 +63,12 @@ $recruiter = Recruiter::where('id', $offer['recruiter_id'])->first();
     </div>
     @endrole
 
-    <div class="col-xl-9">
+    @role('candidate')
+        <div class="col-xl-9">
+    @endrole
+    @role('recruiter')
+        <div class="col-xl-12">
+    @endrole
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>{{ $recruiter->firm_name }}</div>
@@ -89,7 +94,7 @@ $recruiter = Recruiter::where('id', $offer['recruiter_id'])->first();
                             @csrf
                             @method('POST')
                             <input type="hidden" value="{{$offer['id']}}" name="offer" hidden>
-                            <button class="btn btn-primary" type="submit"><i class="bi bi-check-circle me-1"></i> Respond</button>
+                            <button class="btn btn-primary" type="submit"><i class="bi bi-check-circle me-1"></i> Apply</button>
                         </form>
                         @else
                         {{-- Offer is not active --}}

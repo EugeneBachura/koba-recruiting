@@ -5,6 +5,8 @@
 4. Select options in .env for connect DB<br>
 5. Console command: <code>php artisan migrate</code><br>
 6. Console command: <code>php artisan db:seed --class=RoleSeeder</code> - need for roles<br>
+7. Console command: <code>composer update</code><br>
+8. Console command: <code></code>php artisan storage:link</code><br>
 7. Console command: <code>php artisan serve</code>
 
     Recommended PHP 8.1+ (for Laravel 9)
