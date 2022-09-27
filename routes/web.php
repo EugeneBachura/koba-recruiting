@@ -65,4 +65,9 @@ Route::resource('offers', OfferController::class)->middleware(['auth', 'verified
 ]);
 Route::get('/my-offers/{id}', [OfferFilterController::class, 'myOffers'])->middleware(['auth', 'verified'])->name('my_offers');
 
+/* Responses */
+Route::resource('responses', ResponseController::class)->middleware(['auth', 'verified'])->only([
+    'index', 'store', 'show', 'update'
+]);
+
 require __DIR__ . '/auth.php';

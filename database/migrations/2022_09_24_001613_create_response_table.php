@@ -21,6 +21,9 @@ return new class extends Migration
             $table->foreignId('recruiter_id')->constrained('recruiters')
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); //rekruter
+            $table->foreignId('offer_id')->constrained('offers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade'); //oferta
             $table->string('status'); //status
             $table->timestamps(); // czas utworzenia i modyfikacji
         });
