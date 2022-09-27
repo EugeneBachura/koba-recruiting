@@ -365,9 +365,9 @@
             ),
         ),
         'laravel/breeze' => array(
-            'pretty_version' => 'v1.13.1',
-            'version' => '1.13.1.0',
-            'reference' => '1c7592561f5a834eea6c38a77e43ae3c2ee83609',
+            'pretty_version' => 'v1.14.0',
+            'version' => '1.14.0.0',
+            'reference' => '91ae7b749e9b3562355a78f945b4ee71153153f6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../laravel/breeze',
             'aliases' => array(),
@@ -401,9 +401,9 @@
             'dev_requirement' => true,
         ),
         'laravel/sail' => array(
-            'pretty_version' => 'v1.16.0',
-            'version' => '1.16.0.0',
-            'reference' => '73030c18b769f27e6f6aacf7848d024fa9a55560',
+            'pretty_version' => 'v1.16.1',
+            'version' => '1.16.1.0',
+            'reference' => 'cd7b9b6817c871e8b85d4f42e714303ee22676da',
             'type' => 'library',
             'install_path' => __DIR__ . '/../laravel/sail',
             'aliases' => array(),
@@ -727,8 +727,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
